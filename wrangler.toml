@@ -3,6 +3,7 @@
 name = "chcy-wiki-redirect"
 main = "src/index.ts"
 compatibility_date = "2025-07-25"
+routes = [{ pattern = "cc-wiki.sevenc7c.com", custom_domain = true }]
 
 [observability]
 enabled = true
