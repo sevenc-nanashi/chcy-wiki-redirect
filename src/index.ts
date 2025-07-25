@@ -1,18 +1,32 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Bind resources to your worker in `wrangler.jsonc`. After adding bindings, a type definition for the
- * `Env` object can be regenerated with `npm run cf-typegen`.
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+import { Hono } from "hono";
 
-export default {
-	async fetch(request, env, ctx): Promise<Response> {
-		return new Response('Hello World!');
-	},
-} satisfies ExportedHandler<Env>;
+const app = new Hono();
+
+const redirects = {
+  "/": "/ja/",
+  "/ja/publishing-chart": "/ja/publishing",
+  "/ja/guideline": "/ja/guideline",
+  "/ja/sus-extended-features": "/ja/sus-extended-features",
+  "/ja/donation": "/ja/donation",
+  "/en/welcome": "/en/",
+  "/en/publishing-a-chart": "/en/publishing",
+  "/en/guideline": "/en/guideline",
+  "/en/extended-features": "/en/sus-extended-features",
+  "/en/donation": "/en/donation",
+};
+
+app.get("*", (c) => {
+  const path = c.req.path;
+  if (redirects[path as keyof typeof redirects]) {
+    return c.redirect(
+      `https://cc.sevenc7c.com/wiki/${redirects[path as keyof typeof redirects]}`,
+      301,
+    );
+  }
+  if (path.startsWith("/ja/")) {
+    return c.redirect("https://cc.sevenc7c.com/wiki/ja/404", 301);
+  }
+  return c.redirect("https://cc.sevenc7c.com/wiki/en/404", 301);
+});
+
+export default app;

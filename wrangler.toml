@@ -1,0 +1,8 @@
+#:schema: ./node_modules/wrangler/config-schema.json
+
+name = "chcy-wiki-redirect"
+main = "src/index.ts"
+compatibility_date = "2025-07-25"
+
+[observability]
+enabled = true
